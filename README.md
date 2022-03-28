@@ -20,6 +20,76 @@ ThreadLocal을 사용하고 나면, 반드시 `remove()` 메서드를 통해 저
 
 - 상속과 오버라이딩을 통한 다형성으로 문제를 해결하는 것
 
+### 예제
+
+1. 각 메서드의 수행 시간을 측정해야 하는 공통 로직이 있다면, 아래와 같은 방법으로 해결할 수 있다.
+
+> AbstractTemplate
+
+```java
+public abstract class AbstractTemplate {
+    
+    public void execute() {
+        long startTime = System.currentTimeMillis();
+        
+        call();
+        
+        long endTime = System.currentTimeMillis();
+        long resultTime = endTime - startTime;
+        System.out.println("resultTime = " + resultTime);
+    }
+
+    protected abstract void call();
+}
+```
+
+> SubClassLogic1
+
+```java
+public class SubClassLogic1 extends AbstractTemplate {
+    
+    @Override
+    protected void call() {
+        System.out.println("비즈니스 로직1 실행");
+    }
+}
+```
+
+> SubClassLogic2
+
+```java
+public class SubClassLogic2 extends AbstractTemplate {
+
+    @Override
+    protected void call() {
+        System.out.println("비즈니스 로직2 실행");
+    }
+}
+```
+
+> 테스트
+
+```java
+public class TemplateMethodTest {
+
+    @Test
+    void templateMethodV1() {
+        AbstractTemplate template1 = new SubClassLogic1();
+        template1.execute();
+
+        AbstractTemplate template2 = new SubClassLogic2();
+        template2.execute();
+        
+        /* [결과]
+         * 비즈니스 로직1 실행
+         * resultTime=9
+         * 비즈니스 로직2 실행
+         * resultTime=0
+         * */
+    }
+}
+```
+
 ### 단점
 
 - 자식 클래스가 부모 클래스와 컴파일 시점에 강하게 결합되는 문제가 있다. (`의존관계에 대한 문제!`)
