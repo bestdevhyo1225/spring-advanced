@@ -119,3 +119,57 @@ GOF 디자인 패턴에서 정의한 전략 패턴의 의도는 다음과 같다
 `전략 패턴의 핵심은 Context가 Strategy에만 의존` 한다는 점이다. 따라서 `Strategy` 의 구현체를 변경하거나, 새로 만들어도 `Context` 코드에는 영향을 주지 않는다.
 
 > **Spring에서 의존관계를 주입할 때, 사용하는 방식이 바로 전략 패턴이다.**
+
+### 예제
+
+> Strategy (변하는 알고리즘)
+
+```java
+public interface Strategy {
+    void call();
+}
+```
+```java
+@Slf4j
+public class StrategyLogic1 implements Strategy{
+
+    @Override
+    public void call() {
+        log.info("비즈니스 로직1 실행");
+    }
+}
+```
+```java
+@Slf4j
+public class StrategyLogic2 implements Strategy{
+
+    @Override
+    public void call() {
+        log.info("비즈니스 로직2 실행");
+    }
+}
+```
+
+> Context (변하지 않는 템플릿)
+
+```java
+@Slf4j
+public class Context {
+
+    private final Strategy strategy;
+
+    public Context(Strategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public void execute() {
+        long startTime = System.currentTimeMillis();
+        // 비즈니스 로직 실행
+        strategy.call(); // 위임
+        // 비즈니스 로직 종료
+        long endTime = System.currentTimeMillis();
+        long resultTime = endTime - startTime;
+        log.info("resultTime={}", resultTime);
+    }
+}
+```
