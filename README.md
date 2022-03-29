@@ -129,9 +129,11 @@ public interface Strategy {
     void call();
 }
 ```
+
 ```java
+
 @Slf4j
-public class StrategyLogic1 implements Strategy{
+public class StrategyLogic1 implements Strategy {
 
     @Override
     public void call() {
@@ -139,9 +141,11 @@ public class StrategyLogic1 implements Strategy{
     }
 }
 ```
+
 ```java
+
 @Slf4j
-public class StrategyLogic2 implements Strategy{
+public class StrategyLogic2 implements Strategy {
 
     @Override
     public void call() {
@@ -153,6 +157,7 @@ public class StrategyLogic2 implements Strategy{
 > Context (변하지 않는 템플릿)
 
 ```java
+
 @Slf4j
 public class Context {
 
