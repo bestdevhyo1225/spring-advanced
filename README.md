@@ -120,7 +120,7 @@ GOF 디자인 패턴에서 정의한 전략 패턴의 의도는 다음과 같다
 
 > **Spring에서 의존관계를 주입할 때, 사용하는 방식이 바로 전략 패턴이다.**
 
-### 예제
+### 예제 (필드에 젼략을 보관하는 방식)
 
 > Strategy (변하는 알고리즘)
 
@@ -159,11 +159,11 @@ public class StrategyLogic2 implements Strategy {
 ```java
 
 @Slf4j
-public class Context {
+public class ContextV1 {
 
     private final Strategy strategy;
 
-    public Context(Strategy strategy) {
+    public ContextV1(Strategy strategy) {
         this.strategy = strategy;
     }
 
@@ -195,3 +195,48 @@ public class ContextV1Test {
     }
 }
 ```
+
+### 예제 (전략을 파라미터로 전달 받는 방식)
+
+```java
+
+@Slf4j
+public class ContextV2 {
+
+    public void execute(Strategy strategy) {
+        long startTime = System.currentTimeMillis();
+        // 비즈니스 로직 실행
+        strategy.call(); // 위임
+        // 비즈니스 로직 종료
+        long endTime = System.currentTimeMillis();
+        long resultTime = endTime - startTime;
+        log.info("resultTime={}", resultTime);
+    }
+}
+```
+
+```java
+
+@Slf4j
+public class ContextV2Test {
+
+    @Test
+    void strategyV3() {
+        ContextV2 context = new ContextV2();
+        context.execute(() -> log.info("비즈니스 로직1 실행"));
+        context.execute(() -> log.info("비즈니스 로직2 실행"));
+    }
+}
+```
+
+### 정리
+
+`Context1` 의 경우, `Strategy` 를 저장하는 방식으로 구현했다.
+
+- 선 조립 후, 실행 방법에 적합하다.
+- `Context` 를 실행하는 시점에는 이미 조립이 끝났기 때문에 단순히 실행만 하면된다.
+
+`Context2` 는 파라미터에 `Strategy` 를 전달받는 방식으로 구현했다.
+
+- 실행할 때 마다 전략을 유연하게 사용할 수 있다.
+- 단점은 실행할 때 마다 전략을 계속 지정해줘야 한다는 점이다.
