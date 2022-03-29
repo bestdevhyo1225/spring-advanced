@@ -178,3 +178,20 @@ public class Context {
     }
 }
 ```
+
+인터페이스에 메서드가 하나가 있으면, 익명 내부 클래스를 람다로 변경할 수 있다.
+
+```java
+
+@Slf4j
+public class ContextV1Test {
+    @Test
+    void strategyV3() {
+        ContextV1 context1 = new ContextV1(() -> log.info("비즈니스 로직1 실행"));
+        context1.execute();
+
+        ContextV1 context2 = new ContextV1(() -> log.info("비즈니스 로직2 실행"));
+        context2.execute();
+    }
+}
+```
