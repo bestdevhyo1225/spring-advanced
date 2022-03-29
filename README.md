@@ -2,7 +2,8 @@
 
 ## Thread Local
 
-싱글톤 클래스에 필드를 선언해서 사용하면, 동시성 문제가 반드시 발생하는데, 필드를 읽는 경우에는 동시성 문제가 발생하지 않지만, 필드를 `동시에 수정하는 경우` 에 동시성 문제가 발생한다. 이 때, `ThreadLocal` 객체를 사용하면, 동시성 문제를 해결할 수 있다. ThreadLocal 특징을 다음과 같이 요약할 수 있다.
+싱글톤 클래스에 필드를 선언해서 사용하면, 동시성 문제가 반드시 발생하는데, 필드를 읽는 경우에는 동시성 문제가 발생하지 않지만, 필드를 `동시에 수정하는 경우` 에 동시성 문제가 발생한다. 이
+때, `ThreadLocal` 객체를 사용하면, 동시성 문제를 해결할 수 있다. ThreadLocal 특징을 다음과 같이 요약할 수 있다.
 
 - 해당 스레드만 접근할 수 있는 특별한 저장소이다.
 - 각 스레드의 별도 내부 저장소이다.
@@ -14,7 +15,7 @@ ThreadLocal을 사용하고 나면, 반드시 `remove()` 메서드를 통해 저
 
 - `remove()` 를 하지 않으면, 이전 사용자의 정보가 남아있는 치명적인 문제가 발생한다.
 
-## 템플릿 메서드 패턴
+## 템플릿 메서드 패턴 (Template Method Pattern)
 
 부모 클래스에 알고리즘의 골격인 템플릿을 정의하고, 일부 변경되는 로직은 자식 클래스에서 정의하는 것이다. 이렇게 하면 자식 클래스가 알고리즘의 전체 구조를 변경하지 않고, 특정 부분만 재정의할 수 있다.
 
@@ -28,12 +29,12 @@ ThreadLocal을 사용하고 나면, 반드시 `remove()` 메서드를 통해 저
 
 ```java
 public abstract class AbstractTemplate {
-    
+
     public void execute() {
         long startTime = System.currentTimeMillis();
-        
+
         call();
-        
+
         long endTime = System.currentTimeMillis();
         long resultTime = endTime - startTime;
         System.out.println("resultTime = " + resultTime);
@@ -47,7 +48,7 @@ public abstract class AbstractTemplate {
 
 ```java
 public class SubClassLogic1 extends AbstractTemplate {
-    
+
     @Override
     protected void call() {
         System.out.println("비즈니스 로직1 실행");
@@ -79,7 +80,7 @@ public class TemplateMethodTest {
 
         AbstractTemplate template2 = new SubClassLogic2();
         template2.execute();
-        
+
         /* [결과]
          * 비즈니스 로직1 실행
          * resultTime=9
@@ -101,3 +102,20 @@ public class TemplateMethodTest {
 - 상속보다는 위임, 컴포지션, 구성
 
 - 템플릿 메서드 패턴과 비슷한 역할을 하면서 상속의 단점을 제거할 수 있는 **`전략 패턴(Strategy Pattern)`** 이 있다.
+
+## 전략 패턴 (Strategy Pattern)
+
+전략 패턴은 `변하지 않는 부분을 Context` 라는 곳에 두고, `변하는 부분을 Strategy` 라는 인터페이스 를 만들고, 해당 인터페이스를 구현하도록 해서 문제를
+해결한다. **`상속이 아니라 위임으로 문제를 해결하는 것이다.`**
+
+- `Context` 는 `변하지 않는 템플릿` 역할을 한다.
+
+- `Strategy` 는 `변하는 알고리즘` 역할은 한다.
+
+GOF 디자인 패턴에서 정의한 전략 패턴의 의도는 다음과 같다.
+
+> 알고리즘 제품군을 정의하고, 각각을 캡슐화하여 상호 교환 가능하게 만들자. 전략을 사용하면, **`알고리즘을 사용하는 클라이언트와 독립적으로 알고리즘을 변경`** 할 수 있다.
+
+`전략 패턴의 핵심은 Context가 Strategy에만 의존` 한다는 점이다. 따라서 `Strategy` 의 구현체를 변경하거나, 새로 만들어도 `Context` 코드에는 영향을 주지 않는다.
+
+> **Spring에서 의존관계를 주입할 때, 사용하는 방식이 바로 전략 패턴이다.**
