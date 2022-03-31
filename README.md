@@ -240,3 +240,13 @@ public class ContextV2Test {
 
 - 실행할 때 마다 전략을 유연하게 사용할 수 있다.
 - 단점은 실행할 때 마다 전략을 계속 지정해줘야 한다는 점이다.
+
+## 템플릿 콜백 패턴
+
+### Callback?
+
+프로그래밍에서 `callback` 또는 `call-after function` 은 다른 코드의 인수로서 넘겨주는 실행 가능한 코드를 말한다. 콜백을 넘겨받는 코드는 필요에 따라 `즉시 실행` 할 수도
+있고, `나중에 실행` 할 수도 있다.
+
+스프링에서는 `JdbcTemplate`, `RestTemplate`, `TransactionTemplate`, `RedisTemplate` 의 경우, 템플릿 콜백 패턴이 사용되었고, `xxxTemplate` 이름을
+가지고 있다면, 템플릿 콜백 패턴이 사용되었다고 생각하면 된다. 
