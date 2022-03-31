@@ -249,4 +249,46 @@ public class ContextV2Test {
 있고, `나중에 실행` 할 수도 있다.
 
 스프링에서는 `JdbcTemplate`, `RestTemplate`, `TransactionTemplate`, `RedisTemplate` 의 경우, 템플릿 콜백 패턴이 사용되었고, `xxxTemplate` 이름을
-가지고 있다면, 템플릿 콜백 패턴이 사용되었다고 생각하면 된다. 
+가지고 있다면, 템플릿 콜백 패턴이 사용되었다고 생각하면 된다.
+
+### 예제
+
+- `Context` -> `Template`
+- `Strategy` -> `Callback`
+
+```java
+public interface Callback {
+    void call();
+}
+```
+
+```java
+
+@Slf4j
+public class TimeLogTemplate {
+
+    public void execute(Callback callback) {
+        long startTime = System.currentTimeMillis();
+        // 비즈니스 로직 실행
+        callback.call(); // 위임
+        // 비즈니스 로직 종료
+        long endTime = System.currentTimeMillis();
+        long resultTime = endTime - startTime;
+        log.info("resultTime={}", resultTime);
+    }
+}
+```
+
+```java
+
+@Slf4j
+public class TemplateCallbackTest {
+
+    @Test
+    void callbackV2() {
+        TimeLogTemplate template = new TimeLogTemplate();
+        template.execute(() -> log.info("비즈니스 로직1 실행"));
+        template.execute(() -> log.info("비즈니스 로직2 실행"));
+    }
+}
+```
